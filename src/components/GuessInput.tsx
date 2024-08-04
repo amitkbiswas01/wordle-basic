@@ -1,12 +1,20 @@
 import React from "react";
+import { TGameStatus } from "@/types";
 
-function GuessInput() {
+function GuessInput({
+  handleGuessInput,
+  gameStatus,
+}: {
+  handleGuessInput: (newGuess: string) => void;
+  gameStatus: TGameStatus;
+}) {
   const [guessError, setGuessError] = React.useState<string>("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const inputElem = event.target as HTMLFormElement;
 
-    const formData = new FormData(event.target as HTMLFormElement);
+    const formData = new FormData(inputElem);
     const guess = (formData.get("guess-input") as string).toUpperCase();
 
     if (!guess) {
@@ -24,7 +32,9 @@ function GuessInput() {
       return;
     }
 
+    inputElem.reset();
     setGuessError("");
+    handleGuessInput(guess);
   };
 
   return (
@@ -44,6 +54,7 @@ function GuessInput() {
         aria-describedby="guess-input-help"
         aria-invalid={!!guessError}
         aria-errormessage="guess-input-error"
+        disabled={gameStatus !== "running"}
       />
       {guessError && (
         <p
