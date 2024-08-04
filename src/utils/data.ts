@@ -4,6 +4,7 @@ export const WORDLE_HOW_TO_PLAY =
 export const GAME_LOST = "Sorry! You've lost. The correct answer was: ";
 export const GAME_WON = "Congratulations! You've guessed the correct answer in";
 export const NUM_OF_TRIES = 6;
+export const WORD_LENGTH = 5;
 
 export const WORDS = [
   "AGENT",

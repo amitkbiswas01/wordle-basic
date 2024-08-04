@@ -1,9 +1,10 @@
 import React from "react";
-import { TGameStatus, TModal } from "./types";
+import Guesses from "./components/Guesses";
+import GuessInput from "./components/GuessInput";
 import Header from "./components/Header";
 import Modal from "./components/Modal";
-import GuessInput from "./components/GuessInput";
-import { GAME_LOST, GAME_WON, NUM_OF_TRIES, WORDS } from "./utils/data";
+import { TModal, TGuessResult, TGameStatus } from "./types";
+import { WORDS, NUM_OF_TRIES, GAME_LOST, GAME_WON } from "./utils/data";
 import { checkGuess } from "./utils/result-checker";
 
 const ANSWER = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -14,15 +15,16 @@ function App() {
     isVisible: false,
     message: null,
   });
-  const [guesses, setGuesses] = React.useState<string[]>([]);
+  const [guesses, setGuesses] = React.useState<TGuessResult[]>([]);
   const [gameStatus, setGameStatus] = React.useState<TGameStatus>("running");
 
   const handleGuessInput = (newGuess: string) => {
-    const updatedGuesses = [...guesses, newGuess];
+    const guessResult = checkGuess(newGuess, ANSWER);
+
+    const updatedGuesses = [...guesses, guessResult];
     setGuesses(updatedGuesses);
 
     if (updatedGuesses.length >= NUM_OF_TRIES) {
-      setGuesses([]);
       setModal({
         isVisible: true,
         message: `${GAME_LOST} ${ANSWER}`,
@@ -30,9 +32,9 @@ function App() {
       setGameStatus("lost");
     }
 
-    const guessResult = checkGuess(newGuess, ANSWER);
-    const isGuessCorrect =
-      guessResult && guessResult.every((guess) => guess.status === "correct");
+    const isGuessCorrect = guessResult.every(
+      (guess) => guess.status === "correct"
+    );
 
     if (isGuessCorrect) {
       setModal({
@@ -48,6 +50,7 @@ function App() {
       {modal.isVisible && <Modal modal={modal} setModal={setModal} />}
       <Header setModal={setModal} />
       <GuessInput handleGuessInput={handleGuessInput} gameStatus={gameStatus} />
+      <Guesses guesses={guesses} />
     </div>
   );
 }
