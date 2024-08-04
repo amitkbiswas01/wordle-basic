@@ -14,6 +14,7 @@ function App() {
   const [modal, setModal] = React.useState<TModal>({
     isVisible: false,
     message: null,
+    theme: "general",
   });
   const [guesses, setGuesses] = React.useState<TGuessResult[]>([]);
   const [gameStatus, setGameStatus] = React.useState<TGameStatus>("running");
@@ -28,6 +29,7 @@ function App() {
       setModal({
         isVisible: true,
         message: `${GAME_LOST} ${ANSWER}`,
+        theme: "failure",
       });
       setGameStatus("lost");
     }
@@ -40,13 +42,14 @@ function App() {
       setModal({
         isVisible: true,
         message: `${GAME_WON} ${updatedGuesses.length} tries!`,
+        theme: "success",
       });
       setGameStatus("won");
     }
   };
 
   return (
-    <div className="w-full max-w-[540px] mx-auto relative flex flex-col items-center gap-4">
+    <div className="w-full max-w-[480px] mx-auto relative flex flex-col items-center gap-4">
       {modal.isVisible && <Modal modal={modal} setModal={setModal} />}
       <Header setModal={setModal} />
       <GuessInput handleGuessInput={handleGuessInput} gameStatus={gameStatus} />

@@ -4,7 +4,7 @@ import Guess from "./Guess";
 
 function Guesses({ guesses }: { guesses: TGuessResult[] }) {
   return (
-    <div className="w-full my-4 flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2">
       {Array(NUM_OF_TRIES)
         .fill(null)
         .map((_, index) => {

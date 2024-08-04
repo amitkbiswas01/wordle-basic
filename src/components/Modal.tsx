@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from "react";
 import { TModal } from "@/types";
 import CrossCircleLogo from "@/assets/cross-circle.svg";
 
@@ -7,17 +6,16 @@ type TModalProp = {
   setModal: React.Dispatch<React.SetStateAction<TModal>>;
 };
 
+const getModalBg = (theme: TModal["theme"]) => {
+  if (theme === "failure") return "text-white bg-red-600 border-red-900";
+  if (theme === "success") return "text-white bg-green-600 border-green-900";
+
+  return "bg-white";
+};
+
 function Modal({ modal, setModal }: TModalProp) {
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (modal.isVisible) {
-      modalRef.current?.focus();
-    }
-  }, [modal.isVisible]);
-
   const closeModal = () => {
-    setModal({ isVisible: false, message: null });
+    setModal({ isVisible: false, message: null, theme: "general" });
   };
 
   return (
@@ -28,12 +26,14 @@ function Modal({ modal, setModal }: TModalProp) {
       aria-modal="true"
     >
       <div
-        ref={modalRef}
         tabIndex={-1}
-        className="w-full max-w-[540px] p-4 bg-white border rounded-md flex flex-col items-start gap-4"
+        className={
+          "w-full max-w-[480px] p-4 border rounded-md flex flex-col items-start gap-4 " +
+          getModalBg(modal.theme)
+        }
       >
         <button
-          className="hover:scale-110 transform self-end"
+          className="hover:scale-110 transform self-end text-inherit"
           onClick={closeModal}
           aria-label="Close modal"
         >

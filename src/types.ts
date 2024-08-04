@@ -1,6 +1,7 @@
 export type TModal = {
   isVisible: boolean;
   message: string | null;
+  theme: "success" | "failure" | "general";
 };
 
 export type TGameStatus = "running" | "won" | "lost";
